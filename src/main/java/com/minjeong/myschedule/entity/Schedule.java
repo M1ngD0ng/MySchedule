@@ -19,20 +19,25 @@ public class Schedule {
 
     private Long id;
 
+    private String title;
+    private String password;
+
     private String username;
-
     private String contents;
-
     private LocalDateTime modifiedAt;
 
     public Schedule(ScheduleRequestDto requestDto) {
         this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
         this.modifiedAt = LocalDateTime.now();
+        this.title = requestDto.getTitle();
+        this.password = requestDto.getPassword();
     }
 
     public void update(ScheduleRequestDto requestDto) {
         this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
+        this.modifiedAt = LocalDateTime.now();
+        this.title = requestDto.getTitle();
     }
 }

@@ -9,6 +9,9 @@ public class ScheduleRequestDto {
     private Long id;
     private String username;
 
+    private String title;
+    private String password;
+
     private String contents;
     private LocalDateTime modifiedAt;
 

@@ -25,7 +25,6 @@ public class ScheduleController {
         schedulelist.put(schedule.getId(), schedule);
 
         ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(schedule);
-
         return scheduleResponseDto;
     }
     @GetMapping("/schedules")
@@ -36,23 +35,33 @@ public class ScheduleController {
     }
 
     @PutMapping("/schedules/{id}")
-    public Long updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto) {
+    public ScheduleResponseDto updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto) {
         if(schedulelist.containsKey(id)) {
             Schedule schedule = schedulelist.get(id);
 
-            schedule.update(requestDto);
-            return schedule.getId();
+            if(schedule.getPassword().equals(requestDto.getPassword())){
+                schedule.update(requestDto);
+                ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(schedule);
+                return scheduleResponseDto;
+            }else {
+                throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            }
         } else{
             throw new IllegalArgumentException("선택한 일정이 존재하지 않습니다.");
         }
     }
 
     @DeleteMapping("/schedules/{id}")
-    public Long deleteSchedule(@PathVariable Long id) {
-        if(schedulelist.containsKey(id)) {
-            schedulelist.remove(id);
-            return id;
-        }else {
+    public Long deleteSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto) {
+        if (schedulelist.containsKey(id)) {
+            Schedule schedule = schedulelist.get(id);
+            if(schedule.getPassword().equals(requestDto.getPassword())){
+                schedulelist.remove(id);
+                return schedule.getId();
+            }else {
+                throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            }
+        } else {
             throw new IllegalArgumentException("선택한 일정이 존재하지 않습니다.");
         }
     }

@@ -15,6 +15,9 @@ public class ScheduleResponseDto {
     private Long id;
     private String username;
 
+    private String title;
+    private String password;
+
     private String contents;
     private LocalDateTime modifiedAt;
 
@@ -23,6 +26,7 @@ public class ScheduleResponseDto {
         this.username=schedule.getUsername();
         this.contents=schedule.getContents();
         this.modifiedAt=schedule.getModifiedAt();
+        this.title=schedule.getTitle();
     }
 
 }
