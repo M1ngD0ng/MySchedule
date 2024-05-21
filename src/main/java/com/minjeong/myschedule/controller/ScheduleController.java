@@ -4,6 +4,7 @@ import com.minjeong.myschedule.dto.ScheduleRequestDto;
 import com.minjeong.myschedule.dto.ScheduleResponseDto;
 import com.minjeong.myschedule.entity.Schedule;
 import com.minjeong.myschedule.service.ScheduleService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class ScheduleController {
     }
 
     @PostMapping("/schedules")
-    public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+    public ScheduleResponseDto createSchedule(@Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
         return scheduleService.createSchedule(scheduleRequestDto);
     }
 
@@ -33,7 +34,7 @@ public class ScheduleController {
     }
 
     @PostMapping("/schedules/{id}")
-    public ScheduleResponseDto updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto scheduleRequestDto) {
+    public ScheduleResponseDto updateSchedule(@PathVariable Long id, @Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
         return scheduleService.updateSchedule(id, scheduleRequestDto);
     }
 

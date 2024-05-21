@@ -22,6 +22,9 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 	// JPA 구현체인 hibernate
 	implementation 'org.hibernate:hibernate-core:6.1.7.Final'
 	// JPA 설정
