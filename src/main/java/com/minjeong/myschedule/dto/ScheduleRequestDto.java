@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class ScheduleRequestDto {
-    private Long id;
 
     @NotNull
     @Size(min=1, max=200)
