@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
 
@@ -37,7 +38,6 @@ public class ScheduleService {
         return scheduleRepository.findAllByOrderByModifiedAtDesc().stream().map(ScheduleResponseDto::new).toList();
     }
 
-    @Transactional
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(()->new IllegalArgumentException("선택한 일정이 존재하지 않습니다."));
         if(schedule.getPassword().equals(requestDto.getPassword())){
@@ -49,7 +49,6 @@ public class ScheduleService {
         return responseDto;
     }
 
-    @Transactional
     public Long deleteSchedule(Long id, ScheduleRequestDto requestDto) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("선택한 일정이 존재하지 않습니다."));
         if(schedule.getPassword().equals(requestDto.getPassword())){
