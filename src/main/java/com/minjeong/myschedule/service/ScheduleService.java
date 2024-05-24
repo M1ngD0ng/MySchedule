@@ -1,5 +1,6 @@
 package com.minjeong.myschedule.service;
 
+import com.minjeong.myschedule.dto.CommentResponseDto;
 import com.minjeong.myschedule.dto.ScheduleRequestDto;
 import com.minjeong.myschedule.dto.ScheduleResponseDto;
 import com.minjeong.myschedule.entity.Schedule;
@@ -57,5 +58,11 @@ public class ScheduleService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         return id;
+    }
+
+    public List<CommentResponseDto> getScheduleComments(Long id){
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("선택한 일정이 존재하지 않습니다."));
+        List<CommentResponseDto> commentResponseDtos= schedule.getCommentList().stream().map(CommentResponseDto::new).toList();
+        return commentResponseDtos;
     }
 }

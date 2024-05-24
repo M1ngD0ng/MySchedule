@@ -1,7 +1,9 @@
 package com.minjeong.myschedule.controller;
 
+import com.minjeong.myschedule.dto.CommentResponseDto;
 import com.minjeong.myschedule.dto.ScheduleRequestDto;
 import com.minjeong.myschedule.dto.ScheduleResponseDto;
+import com.minjeong.myschedule.entity.Comment;
 import com.minjeong.myschedule.entity.Schedule;
 import com.minjeong.myschedule.service.ScheduleService;
 import jakarta.validation.Valid;
@@ -41,5 +43,10 @@ public class ScheduleController {
     @DeleteMapping("/schedules/{id}")
     public Long deleteSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto scheduleRequestDto) {
         return scheduleService.deleteSchedule(id, scheduleRequestDto);
+    }
+
+    @GetMapping("/schedules/{id}/comments")
+    public List<CommentResponseDto> getScheduleComments(@PathVariable Long id) {
+        return scheduleService.getScheduleComments(id);
     }
 }
