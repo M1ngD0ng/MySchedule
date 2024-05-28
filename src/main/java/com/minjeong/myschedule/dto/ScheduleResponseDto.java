@@ -14,7 +14,7 @@ public class ScheduleResponseDto {
     private final String title;
     private final String contents;
     private final String username;
-    private final String password;
+    //private final String password;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
@@ -25,7 +25,7 @@ public class ScheduleResponseDto {
         this.title=schedule.getTitle();
         this.contents=schedule.getContents();
         this.username=schedule.getUsername();
-        this.password=schedule.getPassword();
+       // this.password=schedule.getPassword();
         this.createdAt=schedule.getCreatedAt();
         this.modifiedAt=schedule.getModifiedAt();
 

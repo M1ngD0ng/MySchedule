@@ -43,10 +43,16 @@ public class Comment {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
-    public Comment(CommentRequestDto requestDto){
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public Comment(CommentRequestDto requestDto, Schedule schedule, User user){
         this.contents = requestDto.getContents();
-        this.username = requestDto.getUsername();
+        this.username = user.getUsername();
         this.createdAt = LocalDateTime.now();
+        this.schedule = schedule;
+        this.user = user;
     }
     public void update(CommentRequestDto requestDto){
         this.contents = requestDto.getContents();

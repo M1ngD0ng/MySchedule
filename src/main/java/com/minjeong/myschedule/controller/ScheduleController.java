@@ -21,8 +21,8 @@ public class ScheduleController {
     }
 
     @PostMapping("/schedules")
-    public ScheduleResponseDto createSchedule(@Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return scheduleService.createSchedule(scheduleRequestDto);
+    public ScheduleResponseDto createSchedule(@Valid @RequestBody ScheduleRequestDto scheduleRequestDto, @RequestHeader("Authorization") String authorizationHeader) {
+        return scheduleService.createSchedule(scheduleRequestDto, authorizationHeader);
     }
 
     @GetMapping("/schedules/{id}")
@@ -36,13 +36,13 @@ public class ScheduleController {
     }
 
     @PostMapping("/schedules/{id}")
-    public ScheduleResponseDto updateSchedule(@PathVariable Long id, @Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return scheduleService.updateSchedule(id, scheduleRequestDto);
+    public ScheduleResponseDto updateSchedule(@PathVariable Long id, @Valid @RequestBody ScheduleRequestDto scheduleRequestDto, @RequestHeader("Authorization") String authorizationHeader) {
+        return scheduleService.updateSchedule(id, scheduleRequestDto, authorizationHeader);
     }
 
     @DeleteMapping("/schedules/{id}")
-    public Long deleteSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return scheduleService.deleteSchedule(id, scheduleRequestDto);
+    public Long deleteSchedule(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
+        return scheduleService.deleteSchedule(id, authorizationHeader);
     }
 
     @GetMapping("/schedules/{id}/comments")

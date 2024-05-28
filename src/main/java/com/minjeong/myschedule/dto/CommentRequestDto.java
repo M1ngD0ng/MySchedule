@@ -14,13 +14,10 @@ public class CommentRequestDto {
     @NotBlank
     private String contents;
 
-    @Email
-    private String username;
-
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-
-    @NotBlank
-    private Schedule schedule;
+//
+//    @NotBlank
+//    private Schedule schedule;
 
 }

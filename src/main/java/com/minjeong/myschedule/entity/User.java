@@ -28,6 +28,8 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+
+
     public User(String username, String password, String email, UserRoleEnum role) {
         this.username = username;
         this.password = password;

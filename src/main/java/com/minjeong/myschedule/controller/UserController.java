@@ -39,16 +39,6 @@ public class UserController {
         this.objectMapper = new ObjectMapper();
     }
 
-//
-//    @GetMapping("/user/login-page")
-//    public String loginPage() {
-//        return "login";
-//    }
-//
-//    @GetMapping("/user/signup")
-//    public String signupPage() {
-//        return "signup";
-//    }
 
     @PostMapping("/user/signup")
     public ResponseEntity<String> signup(@RequestBody @Valid SignupRequestDto requestDto, BindingResult bindingResult) {
@@ -74,11 +64,11 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    public void login(@RequestBody LoginRequestDto requestDto, HttpServletResponse res) {
+    public void login(@RequestBody LoginRequestDto requestDto, HttpServletResponse res) throws IOException {
+        CustomResponse customResponse  = new CustomResponse();
         try {
             userService.login(requestDto, res);
 
-            CustomResponse customResponse  = new CustomResponse();
             customResponse.setMessage("로그인이 성공적으로 수행되었습니다.");
             customResponse.setCode(HttpStatus.OK.toString());
 
@@ -89,7 +79,15 @@ public class UserController {
             res.getWriter().write(objToJson);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            customResponse.setMessage(e.getMessage());
+            customResponse.setCode(HttpStatus.BAD_REQUEST.toString());
+
+            String objToJson=objectMapper.writeValueAsString(customResponse);
+
+            res.setContentType("application/json");
+            res.setCharacterEncoding("UTF-8");
+            res.getWriter().write(objToJson);
+
         }
     }
 }

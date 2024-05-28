@@ -38,8 +38,8 @@ public class Schedule {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+//    @Column(name = "password", nullable = false)
+//    private String password;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -52,19 +52,24 @@ public class Schedule {
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.PERSIST, orphanRemoval = true) // 연관된 엔티티까지 자동으로 저장, 삭제
     private List<Comment> commentList = new ArrayList<>();
 
-    public Schedule(ScheduleRequestDto requestDto) {
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public Schedule(ScheduleRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
-        this.username = requestDto.getUsername();
-        this.password = requestDto.getPassword();
+        this.username = user.getUsername();
+        //this.password = requestDto.getPassword();
         this.createdAt = LocalDateTime.now();
+        this.user = user;
     }
 
     public void update(ScheduleRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
-        this.username = requestDto.getUsername();
-        this.password = requestDto.getPassword();
+        // this.username = requestDto.getUsername();
+        //this.password = requestDto.getPassword();
         this.modifiedAt = LocalDateTime.now();
     }
 

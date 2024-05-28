@@ -21,19 +21,29 @@ public class CommentController {
     }
 
     @PostMapping("/schedules/{id}/comments")
-    public CommentResponseDto addComment(@PathVariable("id") Long schedule_id, @RequestBody @Valid CommentRequestDto commentRequestDto) {
-        return commentService.addComment(schedule_id, commentRequestDto);
+    public CommentResponseDto addComment(
+            @PathVariable("id") Long schedule_id,
+            @RequestBody @Valid CommentRequestDto commentRequestDto,
+            @RequestHeader("Authorization") String authorizationHeader) {
+        return commentService.addComment(schedule_id, commentRequestDto, authorizationHeader);
     }
 
     @PostMapping("/schedules/{schedule_id}/comments/{comment_id}")
-    public CommentResponseDto updateComment(@PathVariable("schedule_id") Long schedule_id, @PathVariable("comment_id") Long comment_id, @RequestBody @Valid CommentRequestDto commentRequestDto) {
-        return commentService.updateComment(schedule_id, comment_id, commentRequestDto);
+    public CommentResponseDto updateComment(
+            @PathVariable("schedule_id") Long schedule_id,
+            @PathVariable("comment_id") Long comment_id,
+            @RequestBody @Valid CommentRequestDto commentRequestDto,
+            @RequestHeader("Authorization") String authorizationHeader) {
+        return commentService.updateComment(schedule_id, comment_id, commentRequestDto, authorizationHeader);
     }
 
     @DeleteMapping("/schedules/{schedule_id}/comments/{comment_id}")
-    public ResponseEntity<String> deleteComment(@PathVariable("schedule_id") Long schedule_id, @PathVariable("comment_id") Long comment_id, @RequestBody CommentRequestDto commentRequestDto){
+    public ResponseEntity<String> deleteComment(
+            @PathVariable("schedule_id") Long schedule_id,
+            @PathVariable("comment_id") Long comment_id,
+            @RequestHeader("Authorization") String authorizationHeader){
         try {
-            commentService.deleteComment(schedule_id, comment_id, commentRequestDto);
+            commentService.deleteComment(schedule_id, comment_id, authorizationHeader);
             return ResponseEntity.ok("댓글 삭제가 성공적으로 수행되었습니다.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

@@ -19,11 +19,11 @@ public class ScheduleRequestDto {
     private String title;
     private String contents;
 
-    @Email
-    private String username;
+//    @Email
+//    private String username;
 
-    @NotNull
-    private String password;
+//    @NotNull
+//    private String password;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 }
