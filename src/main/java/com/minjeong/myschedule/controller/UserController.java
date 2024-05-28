@@ -10,17 +10,23 @@ import com.minjeong.myschedule.service.CustomResponse;
 import com.minjeong.myschedule.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
+import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/api")
 public class UserController {
@@ -33,21 +39,32 @@ public class UserController {
         this.objectMapper = new ObjectMapper();
     }
 
-
-    @GetMapping("/user/login-page")
-    public String loginPage() {
-        return "login";
-    }
-
-    @GetMapping("/user/signup")
-    public String signupPage() {
-        return "signup";
-    }
+//
+//    @GetMapping("/user/login-page")
+//    public String loginPage() {
+//        return "login";
+//    }
+//
+//    @GetMapping("/user/signup")
+//    public String signupPage() {
+//        return "signup";
+//    }
 
     @PostMapping("/user/signup")
-    public ResponseEntity<String> signup(@RequestBody SignupRequestDto requestDto) {
+    public ResponseEntity<String> signup(@RequestBody @Valid SignupRequestDto requestDto, BindingResult bindingResult) {
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        String errMsg="";
+
+        if (fieldErrors.size() > 0) {
+            for(FieldError fieldError : fieldErrors) {
+                log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
+                errMsg += (fieldError.getDefaultMessage()+"\n");
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errMsg);
+        }
         try {
             userService.signup(requestDto);
+
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());
@@ -74,14 +91,5 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-//HttpHeaders headers = new HttpHeaders();
-//        headers.add("message", "로그인이 성공적으로 수행되었습니다.");
-//        headers.add("statusCode", HttpStatus.OK.toString());
-//        return ResponseEntity.ok(headers);
-//        res.setStatus(HttpStatus.OK.value());
-//        res.setHeader("message", "로그인이 성공적으로 수행되었습니다.");
-
     }
 }

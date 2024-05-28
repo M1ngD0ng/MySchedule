@@ -4,6 +4,7 @@ import com.minjeong.myschedule.dto.CommentRequestDto;
 import com.minjeong.myschedule.dto.CommentResponseDto;
 import com.minjeong.myschedule.dto.ScheduleResponseDto;
 import com.minjeong.myschedule.service.CommentService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +21,12 @@ public class CommentController {
     }
 
     @PostMapping("/schedules/{id}/comments")
-    public CommentResponseDto addComment(@PathVariable("id") Long schedule_id, @RequestBody CommentRequestDto commentRequestDto) {
+    public CommentResponseDto addComment(@PathVariable("id") Long schedule_id, @RequestBody @Valid CommentRequestDto commentRequestDto) {
         return commentService.addComment(schedule_id, commentRequestDto);
     }
 
     @PostMapping("/schedules/{schedule_id}/comments/{comment_id}")
-    public CommentResponseDto updateComment(@PathVariable("schedule_id") Long schedule_id, @PathVariable("comment_id") Long comment_id, @RequestBody CommentRequestDto commentRequestDto) {
+    public CommentResponseDto updateComment(@PathVariable("schedule_id") Long schedule_id, @PathVariable("comment_id") Long comment_id, @RequestBody @Valid CommentRequestDto commentRequestDto) {
         return commentService.updateComment(schedule_id, comment_id, commentRequestDto);
     }
 
