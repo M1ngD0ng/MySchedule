@@ -1,9 +1,12 @@
 package com.minjeong.myschedule.service;
 
+import com.minjeong.myschedule.dto.LoginRequestDto;
 import com.minjeong.myschedule.dto.SignupRequestDto;
 import com.minjeong.myschedule.entity.User;
 import com.minjeong.myschedule.entity.UserRoleEnum;
+import com.minjeong.myschedule.jwt.JwtUtil;
 import com.minjeong.myschedule.repository.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,9 +16,12 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final JwtUtil jwtUtil;
+
+    public UserService(UserRepository userRepository, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         // this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     // ADMIN_TOKEN
@@ -51,5 +57,25 @@ public class UserService {
         // 사용자 등록
         User user = new User(username, password, email, role);
         userRepository.save(user);
+    }
+
+    public void login(LoginRequestDto requestDto, HttpServletResponse res) {
+        String username = requestDto.getUsername();
+        String password = requestDto.getPassword();
+
+        // 사용자 확인
+        User user = userRepository.findByUsername(username).orElseThrow(
+                ()-> new IllegalArgumentException("등록된 사용자가 없습니다.")
+        );
+
+        // 비밀번호 확인
+        if (!user.getPassword().equals(password)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // JWT 생성 및 쿠키에 저장 후 Response 객체에 추가
+        String token = jwtUtil.createToken(user.getUsername(), user.getRole());
+        jwtUtil.addJwtToCookie(token, res);
+
     }
 }
