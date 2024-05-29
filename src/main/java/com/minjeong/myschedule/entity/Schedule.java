@@ -36,7 +36,7 @@ public class Schedule {
     private String contents;
 
     @Column(name = "username", nullable = false)
-    private String username;
+    private String nickname;
 
 //    @Column(name = "password", nullable = false)
 //    private String password;
@@ -59,7 +59,7 @@ public class Schedule {
     public Schedule(ScheduleRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
-        this.username = user.getUsername();
+        this.nickname = user.getNickname();
         //this.password = requestDto.getPassword();
         this.createdAt = LocalDateTime.now();
         this.user = user;
@@ -68,8 +68,6 @@ public class Schedule {
     public void update(ScheduleRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
-        // this.username = requestDto.getUsername();
-        //this.password = requestDto.getPassword();
         this.modifiedAt = LocalDateTime.now();
     }
 

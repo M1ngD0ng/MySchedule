@@ -21,8 +21,9 @@ public class SignupRequestDto {
     @Pattern(regexp = "[a-zA-Z0-9]+", message = "password에는 영문 대소문자와 숫자만 사용 가능합니다.")
     private String password;
 
-    @Email
-    private String email;
+    @NotBlank
+    @Size(min = 4, max = 10, message = "nickname은 최소 4자 이상, 10자 이하로 입력해주세요.")
+    private String nickname;
 
     private boolean admin = false;
     private String adminToken = "";

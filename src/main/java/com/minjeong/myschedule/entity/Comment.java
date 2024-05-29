@@ -28,8 +28,8 @@ public class Comment {
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
 
-    @Column(name = "username", nullable = false)
-    private String username;
+    @Column(name = "nickname", nullable = false)
+    private String nickname;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -49,7 +49,7 @@ public class Comment {
 
     public Comment(CommentRequestDto requestDto, Schedule schedule, User user){
         this.contents = requestDto.getContents();
-        this.username = user.getUsername();
+        this.nickname = user.getNickname();
         this.createdAt = LocalDateTime.now();
         this.schedule = schedule;
         this.user = user;

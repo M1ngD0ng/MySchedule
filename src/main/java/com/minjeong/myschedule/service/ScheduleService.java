@@ -70,8 +70,8 @@ public class ScheduleService {
 
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(()->new IllegalArgumentException("선택한 일정이 존재하지 않습니다."));
 
-        if(!user.getUsername().equals(schedule.getUsername())){
-            throw new IllegalArgumentException("일정 작성자만 수정할 수 있습니다."); // username이 같아야 수정 가능
+        if(!user.getNickname().equals(schedule.getNickname())){
+            throw new IllegalArgumentException("일정 작성자만 수정할 수 있습니다."); // nickname이 같아야 수정 가능
         }
 
         schedule.update(requestDto);
@@ -93,7 +93,7 @@ public class ScheduleService {
 
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("선택한 일정이 존재하지 않습니다."));
 
-        if(!user.getUsername().equals(schedule.getUsername())){
+        if(!user.getNickname().equals(schedule.getNickname())){
             throw new IllegalArgumentException("일정 작성자만 삭제할 수 있습니다.");
         }
         scheduleRepository.delete(schedule);

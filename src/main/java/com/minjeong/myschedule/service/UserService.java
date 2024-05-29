@@ -39,10 +39,10 @@ public class UserService {
         }
 
         // email 중복확인
-        String email = requestDto.getEmail();
-        Optional<User> checkEmail = userRepository.findByEmail(email);
-        if (checkEmail.isPresent()) {
-            throw new IllegalArgumentException("중복된 Email 입니다.");
+        String nick = requestDto.getNickname();
+        Optional<User> checkNickname = userRepository.findByNickname(nick);
+        if (checkNickname.isPresent()) {
+            throw new IllegalArgumentException("이미 사용중인 닉네임입니다.");
         }
 
         // 사용자 ROLE 확인
@@ -55,7 +55,7 @@ public class UserService {
         }
 
         // 사용자 등록
-        User user = new User(username, password, email, role);
+        User user = new User(nick, username, password, role);
         userRepository.save(user);
     }
 
