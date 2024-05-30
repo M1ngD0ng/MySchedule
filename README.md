@@ -17,4 +17,4 @@
 
 
 ## 📖 API 명세서
-![image](https://github.com/M1ngD0ng/MySchedule/assets/60657536/c33331bc-d293-4eae-98a9-819204da00bb)
+![image](https://github.com/M1ngD0ng/MySchedule/assets/60657536/323ef485-686f-41e9-b748-c5354deeb504)
