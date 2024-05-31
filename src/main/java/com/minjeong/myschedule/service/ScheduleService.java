@@ -8,9 +8,11 @@ import com.minjeong.myschedule.entity.User;
 import com.minjeong.myschedule.jwt.JwtUtil;
 import com.minjeong.myschedule.repository.ScheduleRepository;
 import com.minjeong.myschedule.repository.UserRepository;
+import com.minjeong.myschedule.security.UserDetailsImpl;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -30,18 +32,10 @@ public class ScheduleService {
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
     }
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, String authorizationHeader) {
-        String token = jwtUtil.substringToken(authorizationHeader);
+    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(!jwtUtil.validateToken(token)) {
-            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
-        }
-        Claims info = jwtUtil.getUserInfoFromToken(token);
-
-        User user = userRepository.findByUsername(info.getSubject()).orElseThrow(
-                ()-> new IllegalArgumentException("존재하지 않는 사용자입니다.")); // 이건 어떨때 나오는거지..?
-
-        Schedule schedule = new Schedule(requestDto, user);
+        Schedule schedule = new Schedule(requestDto, userDetails.getUser());
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
         ScheduleResponseDto responseDto = new ScheduleResponseDto(savedSchedule);
@@ -57,20 +51,13 @@ public class ScheduleService {
         return scheduleRepository.findAllByOrderByModifiedAtDesc().stream().map(ScheduleResponseDto::new).toList();
     }
 
-    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto, String authorizationHeader) {
-        String token = jwtUtil.substringToken(authorizationHeader);
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
 
-        if(!jwtUtil.validateToken(token)) {
-            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
-        }
-        Claims info = jwtUtil.getUserInfoFromToken(token);
-
-        User user = userRepository.findByUsername(info.getSubject()).orElseThrow(
-                ()-> new IllegalArgumentException("존재하지 않는 사용자입니다.")); // 이건 어떨때 나오는거지..?
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(()->new IllegalArgumentException("선택한 일정이 존재하지 않습니다."));
 
-        if(!user.getNickname().equals(schedule.getNickname())){
+        if(!userDetails.getUser().getNickname().equals(schedule.getNickname())){
             throw new IllegalArgumentException("일정 작성자만 수정할 수 있습니다."); // nickname이 같아야 수정 가능
         }
 
@@ -79,24 +66,13 @@ public class ScheduleService {
         return responseDto;
     }
 
-    public Long deleteSchedule(Long id, String authorizationHeader) {
-        String token = jwtUtil.substringToken(authorizationHeader);
+    public Long deleteSchedule(Long id) {
 
-        if(!jwtUtil.validateToken(token)) {
-            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
-        }
-        Claims info = jwtUtil.getUserInfoFromToken(token);
+        // 사용자 정보 추출
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        User user = userRepository.findByUsername(info.getSubject()).orElseThrow(
-                ()-> new IllegalArgumentException("존재하지 않는 사용자입니다.")); // 이건 어떨때 나오는거지..?
+        scheduleRepository.deleteScheduleByUserIdAndId(userDetails.getUser().getId(), id);
 
-
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("선택한 일정이 존재하지 않습니다."));
-
-        if(!user.getNickname().equals(schedule.getNickname())){
-            throw new IllegalArgumentException("일정 작성자만 삭제할 수 있습니다.");
-        }
-        scheduleRepository.delete(schedule);
         return id;
     }
 

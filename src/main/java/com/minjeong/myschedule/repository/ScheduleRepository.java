@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findAllByOrderByModifiedAtDesc();
     Optional<Schedule> findById(Long id);
+
+    void deleteScheduleByUserIdAndId(Long schduleId, Long userId);
 }

@@ -2,9 +2,6 @@ package com.minjeong.myschedule.entity;
 
 import com.minjeong.myschedule.dto.ScheduleRequestDto;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,11 +32,9 @@ public class Schedule {
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "nickname", nullable = false)
     private String nickname;
 
-//    @Column(name = "password", nullable = false)
-//    private String password;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -60,7 +55,6 @@ public class Schedule {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
         this.nickname = user.getNickname();
-        //this.password = requestDto.getPassword();
         this.createdAt = LocalDateTime.now();
         this.user = user;
     }

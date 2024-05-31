@@ -15,6 +15,7 @@ public class CommentResponseDto {
     private final LocalDateTime modifiedAt;
 
     private final Long schedule_id;
+    private final Long user_id;
 
     public CommentResponseDto(Comment comment) {
         this.id = comment.getId();
@@ -23,5 +24,6 @@ public class CommentResponseDto {
         this.createdAt = comment.getCreatedAt();
         this.modifiedAt = comment.getModifiedAt();
         this.schedule_id= comment.getSchedule().getId();
+        this.user_id= comment.getUser().getId();
     }
 }

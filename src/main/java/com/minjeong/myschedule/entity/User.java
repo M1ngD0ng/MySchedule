@@ -28,9 +28,6 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-//    @Column(nullable = false, unique = true)
-//    private String email;
-
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;

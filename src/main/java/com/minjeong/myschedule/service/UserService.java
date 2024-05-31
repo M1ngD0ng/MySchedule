@@ -7,30 +7,28 @@ import com.minjeong.myschedule.entity.UserRoleEnum;
 import com.minjeong.myschedule.jwt.JwtUtil;
 import com.minjeong.myschedule.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     private final JwtUtil jwtUtil;
 
-    public UserService(UserRepository userRepository, JwtUtil jwtUtil) {
-        this.userRepository = userRepository;
-        // this.passwordEncoder = passwordEncoder;
-        this.jwtUtil = jwtUtil;
-    }
 
     // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     public void signup(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
-        String password = requestDto.getPassword();
-        // String password = passwordEncoder.encode(requestDto.getPassword());
+        String password = passwordEncoder.encode(requestDto.getPassword());
 
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);

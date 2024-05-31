@@ -5,8 +5,10 @@ import com.minjeong.myschedule.dto.ScheduleRequestDto;
 import com.minjeong.myschedule.dto.ScheduleResponseDto;
 import com.minjeong.myschedule.entity.Comment;
 import com.minjeong.myschedule.entity.Schedule;
+import com.minjeong.myschedule.security.UserDetailsImpl;
 import com.minjeong.myschedule.service.ScheduleService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +23,8 @@ public class ScheduleController {
     }
 
     @PostMapping("/schedules")
-    public ScheduleResponseDto createSchedule(@Valid @RequestBody ScheduleRequestDto scheduleRequestDto, @RequestHeader("Authorization") String authorizationHeader) {
-        return scheduleService.createSchedule(scheduleRequestDto, authorizationHeader);
+    public ScheduleResponseDto createSchedule(@Valid @RequestBody ScheduleRequestDto scheduleRequestDto ) {
+        return scheduleService.createSchedule(scheduleRequestDto);
     }
 
     @GetMapping("/schedules/{id}")
@@ -36,13 +38,14 @@ public class ScheduleController {
     }
 
     @PostMapping("/schedules/{id}")
-    public ScheduleResponseDto updateSchedule(@PathVariable Long id, @Valid @RequestBody ScheduleRequestDto scheduleRequestDto, @RequestHeader("Authorization") String authorizationHeader) {
-        return scheduleService.updateSchedule(id, scheduleRequestDto, authorizationHeader);
+    public ScheduleResponseDto updateSchedule(@PathVariable Long id,
+                                              @Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
+        return scheduleService.updateSchedule(id, scheduleRequestDto);
     }
 
     @DeleteMapping("/schedules/{id}")
-    public Long deleteSchedule(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
-        return scheduleService.deleteSchedule(id, authorizationHeader);
+    public Long deleteSchedule(@PathVariable Long id) {
+        return scheduleService.deleteSchedule(id);
     }
 
     @GetMapping("/schedules/{id}/comments")
