@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 public class CommentService {
     private final ScheduleRepository scheduleRepository;
     private final CommentRepository commentRepository;
@@ -32,6 +31,7 @@ public class CommentService {
         this.jwtUtil = jwtUtil;
     }
 
+    @Transactional
     public CommentResponseDto addComment(Long schedule_id, CommentRequestDto commentRequestDto) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -45,6 +45,7 @@ public class CommentService {
         return responseDto;
     }
 
+    @Transactional
     public CommentResponseDto updateComment(Long schedule_id, Long comment_id, CommentRequestDto commentRequestDto) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -58,6 +59,7 @@ public class CommentService {
         return responseDto;
     }
 
+    @Transactional
     public void deleteComment(Long schedule_id, Long comment_id) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

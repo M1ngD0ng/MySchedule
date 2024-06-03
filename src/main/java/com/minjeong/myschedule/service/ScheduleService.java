@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
@@ -32,6 +31,8 @@ public class ScheduleService {
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
     }
+
+    @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -41,16 +42,21 @@ public class ScheduleService {
         ScheduleResponseDto responseDto = new ScheduleResponseDto(savedSchedule);
         return responseDto;
     }
+
+    @Transactional(readOnly = true)
     public ScheduleResponseDto getSchedule(Long id) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("선택한 일정이 존재하지 않습니다."));
         ScheduleResponseDto responseDto = new ScheduleResponseDto(schedule);
 
         return responseDto;
     }
+
+    @Transactional(readOnly = true)
     public List<ScheduleResponseDto> getSchedules(){
         return scheduleRepository.findAllByOrderByModifiedAtDesc().stream().map(ScheduleResponseDto::new).toList();
     }
 
+    @Transactional
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -66,6 +72,7 @@ public class ScheduleService {
         return responseDto;
     }
 
+    @Transactional
     public Long deleteSchedule(Long id) {
 
         // 사용자 정보 추출
@@ -76,6 +83,7 @@ public class ScheduleService {
         return id;
     }
 
+    @Transactional(readOnly = true)
     public List<CommentResponseDto> getScheduleComments(Long id){
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("선택한 일정이 존재하지 않습니다."));
         List<CommentResponseDto> commentResponseDtos= schedule.getCommentList().stream().map(CommentResponseDto::new).toList();
